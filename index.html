@@ -13,9 +13,11 @@
     </style>
 </head>
 <body>
+    <div id="google_translate_element"></div>
     <button class="btn">Get voice</button>
     <div class="words" contenteditable >sgjsfg</div>
-    <script>
+    <div class="transWords" contenteditable ></div>
+    <script type="text/javascript">
         const btn = document.querySelector('.btn');
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -44,7 +46,11 @@
             words.textContent = 'start';
             recognition.start();
         });
-
+        const transWords = document.querySelector('.transWords');
+        function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: "ja" }, "google_translate_element");
+        };
     </script>
+    <script src="https://uploads-ssl.webflow.com/5e6cdff43dea835e0d32f309/5e6ce61775d1ae4d0299ac82_translator.txt"></script>
 </body>
 </html>

@@ -1,98 +1,180 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-        .words{
-            background-color:yellow;
-            width: 300px;
-        }
-    </style>
+  <style>
+    /* CSS comes here */
+    body {
+      font-family: arial;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #6a67ce;
+      color: #FFFFFF;
+      border: 0px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #output {
+      background-color: #F9F9F9;
+      padding: 10px;
+      width: 100%;
+      margin-top: 20px;
+      line-height: 30px;
+    }
+
+    input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 5px;
+      border: solid 2px #BBB;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .translated-ltr {
+      margin-top: -40px;
+    }
+
+    .translated-ltr {
+      margin-top: -40px;
+    }
+
+    .goog-te-banner-frame {
+      display: none;
+      margin-top: -20px;
+    }
+
+    .goog-logo-link {
+      display: none !important;
+    }
+
+    .goog-te-gadget {
+      color: transparent !important;
+    }
+  </style>
+  <title>JavaScript Speech to Text</title>
 </head>
+
 <body>
-    <div id="google_translate_element"></div>
-    <button class="btn">Get voice</button>
-    <div class="words" contenteditable >sgjsfg</div>
-    <br>
-    Select Translated Voice: <select id='voiceList'></select> <br><br>
-    <button class="btnSpeak">Translated voice</button>
-    <script type="text/javascript">
-        const btn = document.querySelector('.btn');
-        const btnSpeak = document.querySelector('.btnSpeak');
-        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  <!-- For speaking -->
+  <h2>JavaScript Speech to Text</h2>
+  <div id="google_translate_element"></div>
+  <p>Click on the below button and speak something...</p>
+  <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
+  <div id="output" class="hide"></div>
 
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ja';
-        recognition.interimResults = true;
+  <!-- for listening -->
+  <h2>JavaScript Text to Speech</h2>
+  <!-- <div><input type="text" id="text-to-speech" placeholder="Enter text to speak..."/></div> -->
+  <div id="text-to-speech"></div>
+  <!-- <div><button type="button" onclick="textToAudio()">Speak</button></div> -->
+  <br />
+  <button id="buttonOutput">Text to Speech</button>
 
-        let p = document.createElement('p');
-        const words = document.querySelector('.words');
-        words.appendChild(p);
+  <!-- Javascripts       -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+  <script type="text/javascript">
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+    apiKey: "AIzaSyAZjaec5Qm-C4oVf8KBB52leJgeeoo5lAc",
+    authDomain: "patienttodoctor-63b2d.firebaseapp.com",
+    databaseURL: "https://patienttodoctor-63b2d.firebaseio.com",
+    projectId: "patienttodoctor-63b2d",
+    storageBucket: "patienttodoctor-63b2d.appspot.com",
+    messagingSenderId: "992653525810",
+    appId: "1:992653525810:web:9a60fdb102cc6a77fb8d2b"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    //Firebase DB reference
+    const db = firebase.database().ref('patient/' + '1');
+    //Firebase Insert
+    function fireBaseInsert(message) {
+      console.log(message);
+      db.set({
+        idOfPatient: '1',
+        message: message
+      });
+    }
+    //Firebase Get
+    function fireBaseGet() {
+      db.on('value', function(snapshot){
+        document.getElementById("text-to-speech").textContent = snapshot.val().message;
+        // myFunction();
+      });
+    }
+    fireBaseGet();
+    /* JS for Speaking */
+    function runSpeechRecognition() {
+      // get output div reference
+      var output = document.getElementById("output");
+      // get action element reference
+      var action = document.getElementById("action");
+      // new speech recognition object
+      var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+      var recognition = new SpeechRecognition();
+      recognition.lang = 'ja';
 
-        recognition.addEventListener('result',e=>{
-            const transcript = Array.from(e.results)
-            .map(result => result[0])
-            .map(result => result.transcript)
-            .join('')
+      // This runs when the speech recognition service starts
+      recognition.onstart = function() {
+        action.innerHTML = "<small>listening, please speak...</small>";
+      };
 
-            p.textContent = transcript;
-            if(e.results[0].isFinal){
-                p=document.createElement('p');
-                words.appendChild(p);
-            }
-        });
-        
-        recognition.addEventListener('end', recognition.start);
-        btn.addEventListener('click',function(){
-            words.textContent = 'start';
-            recognition.start();
-        });
-        function googleTranslateElementInit() {
-        new google.translate.TranslateElement({ pageLanguage: "ja" }, "google_translate_element");
-        };
-        
+      recognition.onspeechend = function() {
+        action.innerHTML = "<small>stopped listening, hope you are done...</small>";
+        recognition.stop();
+      }
 
+      // This runs when the speech recognition service returns result
+      recognition.onresult = function(event) {
+        var transcript = event.results[0][0].transcript;
+        var confidence = event.results[0][0].confidence;
+        output.innerHTML = "<b>Text:</b> " + transcript + "<br/> <b>Confidence:</b> " + confidence * 100 + "%";
+        output.classList.remove("hide");
+        fireBaseInsert(transcript);
+      };
+      // start recognition
+      recognition.start();
+    }
+    /* JS for Listening */
+    document.getElementById('buttonOutput').addEventListener('click',myFunction);
+    function myFunction() {
+      let msg = document.getElementById("text-to-speech").textContent;
+      console.log(msg);
 
-        var synth = window.speechSynthesis;
-        var voices = [];
+      let speech = new SpeechSynthesisUtterance();
+      speech.lang = "en-US";
 
-        PopulateVoices();
-        if(speechSynthesis !== undefined){
-            speechSynthesis.onvoiceschanged = PopulateVoices;
-        }
+      speech.text = msg;
+      speech.volume = 1;
+      speech.rate = 1;
+      speech.pitch = 1;
 
-        btnSpeak.addEventListener('click', ()=> {
-            const text = document.querySelector('.words');
-            console.log(text.textContent);
-            var toSpeak = new SpeechSynthesisUtterance(text.textContent);
-            var selectedVoiceName = voiceList.selectedOptions[0].getAttribute('data-name');
-            voices.forEach((voice)=>{
-                if(voice.name === selectedVoiceName){
-                    toSpeak.voice = voice;
-                }
-            });
-            synth.speak(toSpeak);
-        });
-
-        function PopulateVoices(){
-            voices = synth.getVoices();
-            var selectedIndex = voiceList.selectedIndex < 0 ? 0 : voiceList.selectedIndex;
-            voiceList.innerHTML = '';
-            voices.forEach((voice)=>{
-                var listItem = document.createElement('option');
-                listItem.textContent = voice.name;
-                listItem.setAttribute('data-lang', voice.lang);
-                listItem.setAttribute('data-name', voice.name);
-                voiceList.appendChild(listItem);
-            });
-
-            voiceList.selectedIndex = selectedIndex;
-        }
-
-    </script>
-    <script src="https://uploads-ssl.webflow.com/5e6cdff43dea835e0d32f309/5e6ce61775d1ae4d0299ac82_translator.txt"></script>
+      window.speechSynthesis.speak(speech);
+    }
+  </script>
+  <!-- For Translating -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en'
+      }, 'google_translate_element');
+    }
+  </script>
+  <!-- For Translating -->
+  <script type="text/javascript" src="https://uploads-ssl.webflow.com/5e6cdff43dea835e0d32f309/5e6ce61775d1ae4d0299ac82_translator.txt"></script>
+  <!-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
 </body>
+
 </html>

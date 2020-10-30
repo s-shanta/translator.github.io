@@ -124,7 +124,7 @@
       // new speech recognition object
       var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
       var recognition = new SpeechRecognition();
-      recognition.lang = 'ja';
+      recognition.lang = 'en';
 
       // This runs when the speech recognition service starts
       recognition.onstart = function() {
@@ -154,7 +154,7 @@
       console.log(msg);
 
       let speech = new SpeechSynthesisUtterance();
-      speech.lang = "en-US";
+      speech.lang = "jaSS";
 
       speech.text = msg;
       speech.volume = 1;

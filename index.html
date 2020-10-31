@@ -85,6 +85,8 @@
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
   <script type="text/javascript">
+    //language recognition
+    var language = '';
     // Your web app's Firebase configuration
     var firebaseConfig = {
     apiKey: "AIzaSyAZjaec5Qm-C4oVf8KBB52leJgeeoo5lAc",
@@ -116,6 +118,21 @@
     }
     fireBaseGet();
     /* JS for Speaking */
+    
+    //selecting language for input and output
+    function selectLanguage(){
+      var select = document.querySelector('select.goog-te-combo');
+        if(select.value == 'ja'){
+          select.dispatchEvent(new Event('change'));
+          // console.log(4);
+          language = 'ja';
+        }
+        else{
+          select.dispatchEvent(new Event('change'));
+          // console.log(5);
+          language = 'en';
+        }
+    }
     function runSpeechRecognition() {
       // get output div reference
       var output = document.getElementById("output");
@@ -124,7 +141,9 @@
       // new speech recognition object
       var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
       var recognition = new SpeechRecognition();
-      recognition.lang = 'en';
+
+      selectLanguage();
+      recognition.lang = language;
 
       // This runs when the speech recognition service starts
       recognition.onstart = function() {
@@ -154,7 +173,16 @@
       console.log(msg);
 
       let speech = new SpeechSynthesisUtterance();
-      speech.lang = "ja";
+      selectLanguage();
+      console.log(window.language);
+      // speech.lang = 'en-US';
+      if(window.language ==='en'){
+        // console.log(5);
+        speech.lang = 'en-US';
+      }else{
+        speech.lang = 'ja';
+        // console.log(4);
+      }
 
       speech.text = msg;
       speech.volume = 1;
@@ -163,12 +191,10 @@
 
       window.speechSynthesis.speak(speech);
     }
-  </script>
-  <!-- For Translating -->
-  <script type="text/javascript">
+
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
-        pageLanguage: 'en'
+        includedLanguages: 'en,ja'
       }, 'google_translate_element');
     }
   </script>

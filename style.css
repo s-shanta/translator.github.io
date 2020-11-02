@@ -1,0 +1,266 @@
+/* CSS comes here */
+.container{
+  margin: 15px;
+}
+h1{
+    color: #8a4980;
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
+    margin-bottom: 5%;
+    margin-top: 5%;
+}
+body {
+    background-color: #e5ddf0;
+    font-family: arial;
+  }
+  #toggle-box{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  #lang{
+    color: #8a4980 ;
+  }
+  /*slider*/
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    box-shadow: 0 0 4px #88888870;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 34px;
+    width: 34px;
+    left: -2px;
+    bottom: 0px;
+    background-color: #8A4980;
+    -webkit-transition: .4s;
+    transition: .4s;
+     box-shadow: 1px 1px 4px #888888;
+  }
+  
+  input:checked + .slider {
+    background-color: #C288B9;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(28px);
+    -ms-transform: translateX(28px);
+    transform: translateX(28px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  #speak-listen-box{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    position: relative;
+    margin: 0 auto;
+    height: 450px;
+    width: 855px;
+    background:  #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  #speak-box
+  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 40px;
+    width: 425px;
+    height: 450px;
+    border-radius: 10px;
+  }
+  .fas.fa-microphone-alt{
+    font-size: 50px;
+  }
+  #speak
+{
+    margin-top: 20px;
+    margin-left: 125px;
+    width: 100px;
+    height: 100px;
+    background: #8A4980;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    transition: 0.2s ease;
+    cursor: pointer;
+    border-radius: 50%;
+    border: solid 5px  #e5ddf0;
+}
+#speak:hover,
+#speak:focus
+{
+    border: solid 3px #8A4980;
+    background: #fff;
+    color: #8A4980;
+    transition: 0.2s ease;
+}
+
+p{
+  color: #888888;
+  font-size: medium;
+  text-align: center;
+}
+#speakingoutput
+{
+    margin-left: 15px;
+    text-align: center;
+    margin-top: 50px;
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 4px;
+    width: 320px;
+    height: 180px;
+    resize: none;
+    border: none;
+    outline: none;
+    font-family: sans-serif;
+    font-weight: 40;
+    font-size: 26px;
+    transition: 0.2s ease;
+}
+
+  .vertical { 
+    margin-left: 425px;
+    margin-right: 425px;
+    border-left: 5px dashed #8A4980; 
+    height: 450px; 
+  } 
+
+  .listen-box
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    box-sizing: border-box;
+    padding: 40px;
+    width: 425px;
+    height: 450px;
+    border-radius: 10px;
+}
+.fas.fa-headphones{
+  font-size: 50px;
+}
+#listen
+{
+  margin-top: 20px;
+  margin-left: 125px;
+  width: 100px;
+  height: 100px;
+  background: #8A4980;
+  border: none;
+  border-radius: 2px;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  transition: 0.2s ease;
+  cursor: pointer;
+  border-radius: 50%;
+  border: solid 5px  #e5ddf0;
+}
+#listen:hover,
+#listen:focus
+{
+    border: solid 3px #8A4980;
+    background: #fff;
+    color: #8A4980;
+    transition: 0.2s ease;
+}
+#listeningoutput
+{
+  color: white;
+  margin-left: 15px;
+    text-align: center;
+    margin-top: 50px;
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 4px;
+    width: 320px;
+    height: 180px;
+    resize: none;
+    border: none;
+    outline: none;
+    font-family: sans-serif;
+    font-weight: 40;
+    font-size: 26px;
+    transition: 0.2s ease;
+}
+
+
+  .hide {
+    display: none;
+  }
+
+  .show {
+    display: block;
+  }
+
+  .translated-ltr {
+    margin-top: -40px;
+  }
+
+  .translated-ltr {
+    margin-top: -40px;
+  }
+
+  .goog-te-banner-frame {
+    display: none;
+    margin-top: -20px;
+  }
+
+  .goog-logo-link {
+    display: none !important;
+  }
+
+  .goog-te-gadget {
+    color: transparent !important;
+  }

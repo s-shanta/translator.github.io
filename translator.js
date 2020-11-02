@@ -1,6 +1,5 @@
 //language recognition
-var language = '';
-    
+var language = 'en';
 // Your web app's Firebase configuration
 var firebaseConfig = {
 apiKey: "AIzaSyAZjaec5Qm-C4oVf8KBB52leJgeeoo5lAc",
@@ -26,39 +25,54 @@ function fireBaseInsert(message) {
 //Firebase Get
 function fireBaseGet() {
   db.on('value', function(snapshot){
-    document.getElementById("text-to-speech").textContent = snapshot.val().message;
+    document.getElementById("listeningoutput").textContent = snapshot.val().message;
     // myFunction();
   });
 }
 fireBaseGet();
-/* JS for Speaking */
 
-//selecting language for input and output
-function selectLanguage(){
-  var select = document.querySelector('select.goog-te-combo');
-  if(select.value == 'ja'){
-      select.dispatchEvent(new Event('change'));
-      // console.log(4);
-      language = 'ja';
-    }
-    else{
-      select.dispatchEvent(new Event('change'));
-      // console.log(5);
-      language = 'en';
-    }
+//selecting google element language
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    includedLanguages: 'en,ja'
+  }, 'google_translate_element');
 }
+//setting dafult toggle as english
+setTimeout(function(){
+  var select = document.querySelector('select.goog-te-combo');
+  select.value    = "en"; 
+  select.dispatchEvent(new Event('change'));
+},500)
+
+//toggle language select
+
+document.getElementById('toggleButton').addEventListener('change',(e)=>{
+  var select = document.querySelector('select.goog-te-combo');
+  if(e.target.checked){
+    console.log('ja');
+    select.value = 'ja';
+    language = 'ja';
+    select.dispatchEvent(new Event('change'));
+  }else{
+    console.log('en');
+    select.value = 'en';
+    language = 'en';
+    select.dispatchEvent(new Event('change'));
+  }
+})
+
 
 //JS for listenning 
+document.getElementById('speak').addEventListener('click', runSpeechRecognition);
 function runSpeechRecognition() {
   // get output div reference
-  var output = document.getElementById("output");
+  var output = document.getElementById("speakingoutput");
   // get action element reference
-  var action = document.getElementById("action");
+  var action = document.getElementById("speak-action");
   // new speech recognition object
   var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
   var recognition = new SpeechRecognition();
 
-  selectLanguage();
   recognition.lang = language;
 
   // This runs when the speech recognition service starts
@@ -69,13 +83,14 @@ function runSpeechRecognition() {
   recognition.onspeechend = function() {
     action.innerHTML = "<small>stopped listening, hope you are done...</small>";
     recognition.stop();
+    var listenAction = document.getElementById("listen-action");
+    listenAction.innerHTML = "<small>done speaking, you may listen...</small>";
   }
 
   // This runs when the speech recognition service returns result
   recognition.onresult = function(event) {
     var transcript = event.results[0][0].transcript;
-    var confidence = event.results[0][0].confidence;
-    output.innerHTML = "<b>Text:</b> " + transcript + "<br/> <b>Confidence:</b> " + confidence * 100 + "%";
+    output.innerHTML = "<b>Text:</b> " + transcript ;
     output.classList.remove("hide");
     fireBaseInsert(transcript);
   };
@@ -84,34 +99,32 @@ function runSpeechRecognition() {
 }
 
 /* JS for Listening */
-document.getElementById('buttonOutput').addEventListener('click',myFunction);
+document.getElementById('listen').addEventListener('click',myFunction);
 function myFunction() {
-  let msg = document.getElementById("text-to-speech").textContent;
+  var listenAction = document.getElementById("listen-action");
+  listenAction.innerHTML = "<small>listening...</small>";
+  document.getElementById('listeningoutput').style.color= 'black';
+  let msg = document.getElementById("listeningoutput").textContent;
   console.log(msg);
 
   let speech = new SpeechSynthesisUtterance();
-  selectLanguage();
+
   console.log(window.language);
-  // speech.lang = 'en-US';
   if(window.language ==='en'){
-    // console.log(5);
     speech.lang = 'en-US';
   }else{
-    speech.lang = 'ja';
-    // console.log(4);
+    speech.lang = 'ja-JP';
   }
 
   speech.text = msg;
   speech.volume = 1;
   speech.rate = 1;
   speech.pitch = 1;
-
   window.speechSynthesis.speak(speech);
-}
-
-//selecting language
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    includedLanguages: 'en,ja'
-  }, 'google_translate_element');
+  
+  speech.onend = e => {
+    listenAction.innerHTML = "<small>click the button and listen...</small>";
+    var action = document.getElementById("speak-action");
+    action.innerHTML = "<small>click the button and speak...</small>";
+  };
 }

@@ -2,83 +2,51 @@
 <html>
 
 <head>
-  <style>
-    /* CSS comes here */
-    body {
-      font-family: arial;
-    }
-
-    button {
-      padding: 10px;
-      background-color: #6a67ce;
-      color: #FFFFFF;
-      border: 0px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    #output {
-      background-color: #F9F9F9;
-      padding: 10px;
-      width: 100%;
-      margin-top: 20px;
-      line-height: 30px;
-    }
-
-    input {
-      padding: 10px;
-      width: 300px;
-      border-radius: 5px;
-      border: solid 2px #BBB;
-    }
-
-    .hide {
-      display: none;
-    }
-
-    .show {
-      display: block;
-    }
-
-    .translated-ltr {
-      margin-top: -40px;
-    }
-
-    .translated-ltr {
-      margin-top: -40px;
-    }
-
-    .goog-te-banner-frame {
-      display: none;
-      margin-top: -20px;
-    }
-
-    .goog-logo-link {
-      display: none !important;
-    }
-
-    .goog-te-gadget {
-      color: transparent !important;
-    }
-  </style>
-  <title>JavaScript Speech to Text</title>
+  <title>Translator App</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://kit.fontawesome.com/98ee088620.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <!-- For speaking -->
-  <h2>JavaScript Speech to Text</h2>
-  <div id="google_translate_element"></div>
-  <p>Click on the below button and speak something...</p>
+  <div class="container">
+    <!--header-->
+  <h1>Voice Translator</h1>
+  <div id="google_translate_element" style='display:none'></div>
+  
+  <div id="toggle-box">
+    <p id="lang">English </p>
+    <label class="switch">
+      <input type="checkbox" id="toggleButton">
+      <span class="slider round"></span>
+    </label>
+    <p id="lang">日本語</p>
+  </div>
+  <!--main box-->
+  <div id="speak-listen-box" >
+    <div id="speak-box">
+      <button type="button" id="speak"><span><i class="fas fa-microphone-alt"></i></span></button>
+      <p><span id="speak-action"><small>click the button and speak...</small></span></p>
+      <div id="speakingoutput"></div>
+    </div>
+    <div class= "vertical"></div>
+    <div class="listen-box">
+      <button type="button" id="listen"><span><i class="fas fa-headphones"></i></span></button>
+      <p><span id="listen-action"><small>click the button and listen...</small></span></p>
+      <div id="listeningoutput"></div>
+    </div>
+  </div>  
+  </div>
+  <!-- <p>Click on the below button and speak something...</p>
   <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
   <div id="output" class="hide"></div>
 
-  <!-- for listening -->
+
   <h2>JavaScript Text to Speech</h2>
-  <!-- <div><input type="text" id="text-to-speech" placeholder="Enter text to speak..."/></div> -->
+  <div><input type="text" id="text-to-speech" placeholder="Enter text to speak..."/></div>
   <div id="text-to-speech"></div>
-  <!-- <div><button type="button" onclick="textToAudio()">Speak</button></div> -->
+  <div><button type="button" onclick="textToAudio()">Speak</button></div>
   <br />
-  <button id="buttonOutput">Text to Speech</button>
+  <button id="buttonOutput">Text to Speech</button> -->
 
   <!-- Javascripts       -->
   <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
